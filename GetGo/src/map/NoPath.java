@@ -2,11 +2,12 @@ package map;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Vector;
 
 public class NoPath extends Layer {
 
-	public NoPath(long id, long[] data, String name) {
-		super(id, data, name);
+	public NoPath(long id, long[] data, String name, Vector<Tile> tiles) {
+		super(id, data, name, tiles);
 	}
 
 	public void draw(Graphics g) {

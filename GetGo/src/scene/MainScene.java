@@ -1,6 +1,7 @@
 package scene;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -14,11 +15,15 @@ import javax.swing.border.EmptyBorder;
 import org.json.simple.parser.ParseException;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 
 public class MainScene extends JFrame {
 
 	private JPanel contentPane;
-	private PlayScene playScene;
+	
+	private static MainScene mainScene;
+	
+	public Container container;
 
 	/**
 	 * Launch the application.
@@ -27,11 +32,11 @@ public class MainScene extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainScene frame = new MainScene();
-					frame.setVisible(true);
-				} catch (Exception e) {
+					mainScene = new MainScene();
+				} catch (IOException | ParseException e) {
 					e.printStackTrace();
 				}
+				mainScene.setVisible(true);
 			}
 		});
 	}
@@ -45,15 +50,18 @@ public class MainScene extends JFrame {
 		contentPane.setBackground(Color.PINK);
 		contentPane.setForeground(Color.BLACK);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout());
 		setContentPane(contentPane);
 		
-		playScene();
+		this.container = new Container();
+		getContentPane().add(this.container);
+		//this.container.setFocusable(true);
+//		playScene();
 	}
 	
-	private void playScene() throws FileNotFoundException, IOException, ParseException {
-		playScene = new PlayScene();
-		getContentPane().add(playScene);
-		playScene.setFocusable(true);
-	}
+//	private void playScene() throws FileNotFoundException, IOException, ParseException {
+//		playScene = new PlayScene();
+//		getContentPane().add(playScene);
+//		playScene.setFocusable(true);
+//	}
 }

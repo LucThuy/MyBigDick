@@ -2,10 +2,18 @@ package minhdeptrai;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
-import assets.Position;
+import javax.imageio.ImageIO;
+
+import algorithm.Cooldown;
+import algorithm.Position;
 
 public class Player {
 	
@@ -16,30 +24,42 @@ public class Player {
 	public int msS;
 	public int ms;
 	
-	public boolean isBlink;
-	public final int BLINK_RANGE = 2;
+	public long[][] data;
+	
+	public Blink blink = new Blink();
 	
 	public Rectangle bound = new Rectangle();
 	
-	public final int WIDTH = 15;
-	public final int HEIGHT = 15;
-	public final int SIZE = 16;
+	public Image img;
 	
-	public Player(int x, int y) {
+	public final int WIDTH = 28;
+	public final int HEIGHT = 28;
+	public final int SIZE = 28;
+	
+	public final String NAME = "MINH";
+	
+	public Player(int x, int y, long[][] data) throws IOException {
 		this.position.x = x;
 		this.position.y = y;
+		this.data = data;
 		this.ms = 1;
 		this.msE = 0;
 		this.msN = 0;
 		this.msW = 0;
 		this.msS = 0;
 		
-		this.isBlink = false;
+		this.blink.isBlink = false;
+		
+		BufferedImage bigImage = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+		bigImage = ImageIO.read(new File("C:\\Users\\d\\eclipse-workspace\\GetGo\\src\\assets\\agv.png"));
+		img = bigImage.getSubimage(3, 5, 24, 24);
 	}
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.GREEN);
 		g.drawRect(this.position.x, this.position.y, WIDTH, HEIGHT);
+		g.drawImage(img, this.position.x, this.position.y, WIDTH, HEIGHT, null);
+		g.drawString(NAME, this.position.x, this.position.y - 3);
 	}
 	
 	public void setBound() {
@@ -51,19 +71,19 @@ public class Player {
 		
 		if(this.msE != 0) {
 			tmp.x += this.msE;
-			if(this.isBlink) {
-				tmp.x += BLINK_RANGE * SIZE;
-				this.isBlink = false;
+			if(this.blink.isBlink) {
+				tmp.x += this.blink.BLINK_RANGE * SIZE;
+				this.blink.isBlink = false;
 			}
 			while(!isOK(tmp, block)) {
 				tmp.x --;
 			}
 		}
-		if(this.msN != 0) {
+		if(this.msN != 0 && this.data[this.position.x / this.SIZE][this.position.y / this.SIZE - 1 ] == (long)20) {
 			tmp.y -= this.msN;
-			if(this.isBlink) {
-				tmp.y -= BLINK_RANGE * SIZE;
-				this.isBlink = false;
+			if(this.blink.isBlink) {
+				tmp.y -= this.blink.BLINK_RANGE * SIZE;
+				this.blink.isBlink = false;
 			}
 			while(!isOK(tmp, block)) {
 				tmp.y ++;
@@ -71,19 +91,19 @@ public class Player {
 		}
 		if(this.msW != 0) {
 			tmp.x -= this.msW;
-			if(this.isBlink) {
-				tmp.x -= BLINK_RANGE * SIZE;
-				this.isBlink = false;
+			if(this.blink.isBlink) {
+				tmp.x -= this.blink.BLINK_RANGE * SIZE;
+				this.blink.isBlink = false;
 			}
 			while(!isOK(tmp, block)) {
 				tmp.x ++;
 			}
 		}
-		if(this.msS != 0) {
+		if(this.msS != 0 && this.data[this.position.x / this.SIZE][this.position.y / this.SIZE + 1 ] == (long)12) {
 			tmp.y += this.msS;
-			if(this.isBlink) {
-				tmp.y += BLINK_RANGE * SIZE;
-				this.isBlink = false;
+			if(this.blink.isBlink) {
+				tmp.y += this.blink.BLINK_RANGE * SIZE;
+				this.blink.isBlink = false;
 			}
 			while(!isOK(tmp, block)) {
 				tmp.y --;

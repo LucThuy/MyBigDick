@@ -5,13 +5,13 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Vector;
 
-import assets.Position;
+import algorithm.Position;
 
 public class Layer {
 	
 	public final long WIDTH = 52;
 	public final long HEIGHT = 28;
-	public final int SIZE = 16;
+	public final int SIZE = 28;
 	
 	public Vector<Position> position = new Vector<>();
 	public Vector<Rectangle> bound = new Vector<>();
@@ -21,10 +21,13 @@ public class Layer {
 	public long[][] dataArr;
 	public String name;
 	
-	public Layer(long id, long[] data, String name) {
+	public Vector<Tile> tiles;
+	
+	public Layer(long id, long[] data, String name, Vector<Tile> tiles) {
 		this.id = id;
 		this.data = data;
 		this.name = name;
+		this.tiles = tiles;
 		this.dataArr = new long[(int) WIDTH][(int) HEIGHT];
 		
 		for(int i = 0; i < data.length; i++) {
@@ -38,8 +41,20 @@ public class Layer {
 	public void draw(Graphics g) {
 		for(int i = 0; i < HEIGHT; i++) {
 			for(int j = 0; j < WIDTH; j++) {
-				if(dataArr[j][i] != 0) {
+				if(dataArr[j][i] != 0) {			
 					g.setColor(Color.WHITE);
+					g.fillRect(j * SIZE, i * SIZE, SIZE, SIZE);
+					g.drawImage(tiles.get((int) dataArr[j][i] - 1).img, j * SIZE, i * SIZE, SIZE, SIZE, null);
+				}
+			}
+		}
+	}
+	
+	public void draw(Graphics g, boolean isZaWarudo) {
+		for(int i = 0; i < HEIGHT; i++) {
+			for(int j = 0; j < WIDTH; j++) {
+				if(dataArr[j][i] != 0) {			
+					g.setColor(Color.DARK_GRAY);
 					g.fillRect(j * SIZE, i * SIZE, SIZE, SIZE);
 				}
 			}
